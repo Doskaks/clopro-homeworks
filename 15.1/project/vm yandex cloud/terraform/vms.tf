@@ -17,7 +17,7 @@ resource "yandex_compute_instance" "nat_instance" {
 
   boot_disk {
     initialize_params {
-      image_id = var.nat_image_id  # ← ИСПОЛЬЗУЕМ NAT ОБРАЗ
+      image_id = var.nat_image_id
       size     = 10
       type     = "network-ssd"
     }
@@ -61,7 +61,7 @@ resource "yandex_compute_instance" "public_vm" {
 
   boot_disk {
     initialize_params {
-      image_id = var.vm_image_id  # ← ИСПОЛЬЗУЕМ СТАНДАРТНЫЙ ОБРАЗ
+      image_id = var.vm_image_id
       size     = 10
       type     = "network-ssd"
     }
@@ -70,6 +70,7 @@ resource "yandex_compute_instance" "public_vm" {
   network_interface {
     subnet_id          = yandex_vpc_subnet.public.id
     nat                = true
+    nat_ip_address     = yandex_vpc_address.public_vm_public_ip.external_ipv4_address[0].address
     security_group_ids = [yandex_vpc_security_group.default.id]
   }
 
@@ -103,7 +104,7 @@ resource "yandex_compute_instance" "private_vm" {
 
   boot_disk {
     initialize_params {
-      image_id = var.vm_image_id  # ← ИСПОЛЬЗУЕМ СТАНДАРТНЫЙ ОБРАЗ
+      image_id = var.vm_image_id
       size     = 10
       type     = "network-ssd"
     }

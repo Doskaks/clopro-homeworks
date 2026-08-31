@@ -1,6 +1,6 @@
-# Публичная ВМ (bastion)
+# Публичная ВМ (bastion) - статический IP
 Host public-vm
-    HostName 51.250.78.161
+    HostName 51.250.7.157
     User ubuntu
     IdentityFile /home/vagrant/.ssh/authorized/id_rsa
     StrictHostKeyChecking no
@@ -8,16 +8,16 @@ Host public-vm
 
 # Приватная ВМ (через публичную)
 Host private-vm
-    HostName 192.168.20.22
+    HostName 192.168.20.4
     User ubuntu
     ProxyJump public-vm
     IdentityFile /home/vagrant/.ssh/authorized/id_rsa
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
 
-# NAT инстанс
+# NAT инстанс - статический IP
 Host nat-vm
-    HostName 51.250.92.78
+    HostName 51.250.78.161
     User ubuntu
     IdentityFile /home/vagrant/.ssh/authorized/id_rsa
     StrictHostKeyChecking no

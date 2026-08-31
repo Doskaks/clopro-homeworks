@@ -12,10 +12,19 @@ resource "yandex_vpc_address" "nat_public_ip" {
   external_ipv4_address {
     zone_id = var.default_zone
   }
-  
 }
 
-# 3. Публичная подсеть
+# 3. Резервируем статический публичный IP-адрес для публичной ВМ
+resource "yandex_vpc_address" "public_vm_public_ip" {
+  name        = "public-vm-public-ip"
+  description = "Static public IP for public VM"
+  
+  external_ipv4_address {
+    zone_id = var.default_zone
+  }
+}
+
+# 4. Публичная подсеть
 resource "yandex_vpc_subnet" "public" {
   name           = "public"
   zone           = var.default_zone
@@ -24,7 +33,7 @@ resource "yandex_vpc_subnet" "public" {
   description    = "Public subnet with NAT instance"
 }
 
-# 4. Приватная подсеть с привязанным route table
+# 5. Приватная подсеть с привязанным route table
 resource "yandex_vpc_subnet" "private" {
   name           = "private"
   zone           = var.default_zone
@@ -34,7 +43,7 @@ resource "yandex_vpc_subnet" "private" {
   route_table_id = yandex_vpc_route_table.private_route.id
 }
 
-# 5. Route Table для приватной подсети
+# 6. Route Table для приватной подсети
 resource "yandex_vpc_route_table" "private_route" {
   name        = "private-route"
   network_id  = yandex_vpc_network.my_network.id
@@ -46,7 +55,7 @@ resource "yandex_vpc_route_table" "private_route" {
   }
 }
 
-# 6. Группа безопасности
+# 7. Группа безопасности
 resource "yandex_vpc_security_group" "default" {
   name        = "default-sg"
   description = "Default security group for all VMs"
